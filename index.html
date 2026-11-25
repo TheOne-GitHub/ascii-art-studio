@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ASCII Studio — Art Vault &amp; Make Anything Lab</title>
+  <meta name="description" content="Curated ASCII &amp; Unicode art vault (flowers, eyes, teddy bears, chess, aesthetic) plus an offline Image-to-ASCII/Braille converter, Text Banner maker, and Mirror-X Draw Canvas." />
+  <meta property="og:title" content="ASCII Studio — Art Vault &amp; Make Anything Lab" />
+  <meta property="og:description" content="Copy-ready ASCII art vault + Image-to-ASCII/Braille converter, ANSI Shadow banner maker, and symmetry ASCII sketchpad." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#090b10" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="ambient-glow" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a href="#top" class="brand" id="brandHome" aria-label="ASCII Studio Home">
+        <span class="brand-glyph" aria-hidden="true">⌘</span>
+        <span class="brand-text">
+          <strong>ASCII<span class="accent">//</span>STUDIO</strong>
+          <small>art vault &amp; maker lab</small>
+        </span>
+      </a>
+
+      <nav class="primary-tabs" role="tablist" aria-label="Primary sections">
+        <button
+          type="button"
+          class="tab-btn is-active"
+          id="tab-vault"
+          role="tab"
+          aria-selected="true"
+          aria-controls="panel-vault"
+          data-tab="vault"
+        >
+          <span class="tab-icon" aria-hidden="true">◈</span>
+          <span>Art Vault</span>
+        </button>
+        <button
+          type="button"
+          class="tab-btn"
+          id="tab-studio"
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-studio"
+          data-tab="studio"
+        >
+          <span class="tab-icon" aria-hidden="true">✦</span>
+          <span>Make Anything</span>
+        </button>
+      </nav>
+
+      <label class="discord-toggle" title="Wrap copied art in Discord triple-backtick code blocks">
+        <input type="checkbox" id="globalDiscordToggle" />
+        <span class="toggle-track" aria-hidden="true"><span class="toggle-thumb"></span></span>
+        <span class="toggle-label">Discord <code>```</code></span>
+      </label>
+    </div>
+  </header>
+
+  <main id="top" class="container main-content">
+    <section class="hero" aria-label="Introduction">
+      <div class="hero-copy">
+        <div class="hero-badge">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span>100% client-side · zero build · copy-ready everywhere</span>
+        </div>
+        <h1>Craft, convert &amp; copy crisp <span class="gradient-text">ASCII &amp; Braille art</span>.</h1>
+        <p class="hero-sub">
+          Browse hand-aligned flowers, eyes, teddy bears, full chessboards &amp; vibes — or build anything from scratch with the Image-to-Braille engine, ANSI Shadow banner maker, and Mirror-X sketchpad.
+        </p>
+      </div>
+      <div class="hero-preview" aria-hidden="true">
+        <div class="terminal-bar">
+          <span class="dot dot-red"></span>
+          <span class="dot dot-yellow"></span>
+          <span class="dot dot-green"></span>
+          <span class="terminal-title">studio.ascii — live preview</span>
+        </div>
+        <pre class="hero-ascii">          _.._             ✦   .   ✧
+        .' .-'`        _.--========--._
+       /  /  _.._    .'  .' ░▒▓██▓▒ '. '.
+      |  | .'    '. &lt;   |  ░▒▓█()█▓▒  |  &gt;
+      \  \ |  ()  |  '.  '. ░▒▓██▓▒ .' .'
+       '._`'.____.'    '--.__====__.--'
+          `--.___.'        ♞  ♡  ❀</pre>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 1: ART VAULT ==================== -->
+    <section id="panel-vault" class="tab-panel is-active" role="tabpanel" aria-labelledby="tab-vault">
+      <div class="vault-toolbar">
+        <div class="search-wrap">
+          <span class="search-icon" aria-hidden="true">⌕</span>
+          <label for="vaultSearch" class="sr-only">Search ASCII art</label>
+          <input
+            type="search"
+            id="vaultSearch"
+            class="search-input"
+            placeholder="Search rose, eye, teddy, chess, crown, dividers..."
+            autocomplete="off"
+          />
+          <button type="button" id="clearSearchBtn" class="clear-search" aria-label="Clear search" hidden>×</button>
+        </div>
+
+        <div class="vault-meta">
+          <span id="vaultCountLabel" class="count-pill">32 pieces</span>
+        </div>
+      </div>
+
+      <div class="category-bar" id="categoryBar" role="group" aria-label="Art categories">
+        <!-- Populated by app.js -->
+      </div>
+
+      <div class="art-grid" id="artGrid" aria-live="polite">
+        <!-- Populated by app.js -->
+      </div>
+
+      <div id="vaultEmpty" class="empty-state" hidden>
+        <pre class="empty-ascii"> (╯°□°）╯︵ ┻━┻</pre>
+        <h3>No matching art in the vault</h3>
+        <p>Try a different keyword or hop into <strong>Make Anything</strong> to generate your own.</p>
+        <button type="button" class="btn btn-primary" id="emptyResetBtn">Show all art</button>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: MAKE ANYTHING STUDIO ==================== -->
+    <section id="panel-studio" class="tab-panel" role="tabpanel" aria-labelledby="tab-studio" hidden>
+      <div class="studio-subnav" role="tablist" aria-label="Studio tools">
+        <button type="button" class="subtab-btn is-active" id="subtab-image" role="tab" aria-selected="true" aria-controls="studio-image" data-subtab="image">
+          <span aria-hidden="true">▦</span> Image → ASCII / Braille
+        </button>
+        <button type="button" class="subtab-btn" id="subtab-banner" role="tab" aria-selected="false" aria-controls="studio-banner" data-subtab="banner">
+          <span aria-hidden="true">Aa</span> Text Banner Maker
+        </button>
+        <button type="button" class="subtab-btn" id="subtab-draw" role="tab" aria-selected="false" aria-controls="studio-draw" data-subtab="draw">
+          <span aria-hidden="true">✎</span> Draw Canvas
+        </button>
+      </div>
+
+      <!-- ===== STUDIO 1: IMAGE TO ASCII / BRAILLE ===== -->
+      <div id="studio-image" class="studio-pane is-active" role="tabpanel" aria-labelledby="subtab-image">
+        <div class="studio-grid">
+          <aside class="control-card">
+            <h2 class="card-heading">1. Source Image</h2>
+
+            <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload an image or drop one here">
+              <input type="file" id="imageFileInput" accept="image/*" hidden />
+              <div class="dropzone-icon" aria-hidden="true">⇪</div>
+              <div class="dropzone-text">
+                <strong>Drop any photo here</strong>
+                <span>or tap to pick PNG, JPG, WebP</span>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <span class="control-label">Or test in 1 click (built-in samples)</span>
+              <div class="sample-pills" id="samplePills">
+                <button type="button" class="pill-btn is-active" data-sample="rose">❀ Rose</button>
+                <button type="button" class="pill-btn" data-sample="eye">◉ Eye</button>
+                <button type="button" class="pill-btn" data-sample="bear">ʕ•ᴥ•ʔ Teddy</button>
+                <button type="button" class="pill-btn" data-sample="knight">♞ Knight</button>
+                <button type="button" class="pill-btn" data-sample="moon">☾ Moon</button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <span class="control-label">2. Render Engine</span>
+              <div class="mode-grid" id="charsetModes">
+                <button type="button" class="mode-btn is-active" data-mode="braille">
+                  <strong>Braille Dots</strong>
+                  <small>⠀–⣿ 2×4 subpixel</small>
+                </button>
+                <button type="button" class="mode-btn" data-mode="classic">
+                  <strong>Classic ASCII</strong>
+                  <small>@%#*+=-:. </small>
+                </button>
+                <button type="button" class="mode-btn" data-mode="dense">
+                  <strong>Dense Shaded</strong>
+                  <small>70-level ramp</small>
+                </button>
+                <button type="button" class="mode-btn" data-mode="blocks">
+                  <strong>Block Art</strong>
+                  <small>█▓▒░ solid</small>
+                </button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <div class="slider-row">
+                <label for="widthSlider" class="control-label">Width (columns)</label>
+                <output id="widthValue" for="widthSlider" class="mono-val">52</output>
+              </div>
+              <input type="range" id="widthSlider" min="24" max="100" value="52" step="2" />
+            </div>
+
+            <div class="control-group">
+              <div class="slider-row">
+                <label for="contrastSlider" class="control-label">Contrast</label>
+                <output id="contrastValue" for="contrastSlider" class="mono-val">+20</output>
+              </div>
+              <input type="range" id="contrastSlider" min="-80" max="100" value="20" step="5" />
+            </div>
+
+            <div class="control-group inline-switches">
+              <label class="switch-row">
+                <input type="checkbox" id="invertToggle" />
+                <span>Invert brightness</span>
+              </label>
+            </div>
+
+            <div class="source-preview-wrap">
+              <span class="control-label">Source preview</span>
+              <canvas id="sourcePreviewCanvas" width="200" height="200" aria-label="Source image preview"></canvas>
+            </div>
+          </aside>
+
+          <div class="output-card">
+            <div class="output-header">
+              <div>
+                <h2 class="card-heading">Live ASCII Output</h2>
+                <span id="imageMetaStats" class="meta-sub">52 cols · Braille 2×4</span>
+              </div>
+              <div class="btn-row">
+                <button type="button" class="btn btn-primary" id="copyImageAsciiBtn">Copy</button>
+                <button type="button" class="btn btn-ghost" id="downloadImageTxtBtn">.txt</button>
+                <button type="button" class="btn btn-ghost" id="downloadImagePngBtn">.png</button>
+              </div>
+            </div>
+            <div class="ascii-stage">
+              <pre id="imageAsciiOutput" class="ascii-output" aria-label="Converted ASCII art output"></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== STUDIO 2: TEXT BANNER MAKER ===== -->
+      <div id="studio-banner" class="studio-pane" role="tabpanel" aria-labelledby="subtab-banner" hidden>
+        <div class="banner-layout">
+          <div class="control-card banner-controls">
+            <div class="control-group">
+              <label for="bannerTextInput" class="control-label">Your Text (A–Z, 0–9, punctuation — multi-line supported)</label>
+              <textarea
+                id="bannerTextInput"
+                class="text-input"
+                rows="2"
+                maxlength="60"
+                placeholder="Type any word, handle, or title..."
+              >ASCII LAB</textarea>
+            </div>
+
+            <div class="banner-options-row">
+              <div class="control-group">
+                <span class="control-label">Banner Font</span>
+                <div class="pill-group" id="bannerFontGroup">
+                  <button type="button" class="pill-btn is-active" data-font="shadow">ANSI Shadow</button>
+                  <button type="button" class="pill-btn" data-font="block">Solid Block</button>
+                  <button type="button" class="pill-btn" data-font="hash">Retro ASCII</button>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <span class="control-label">Frame</span>
+                <div class="pill-group" id="bannerFrameGroup">
+                  <button type="button" class="pill-btn is-active" data-frame="none">Clean</button>
+                  <button type="button" class="pill-btn" data-frame="box">╔═ Box ═╗</button>
+                  <button type="button" class="pill-btn" data-frame="stars">✦ Stars ✦</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="output-card">
+            <div class="output-header">
+              <div>
+                <h2 class="card-heading">Banner Output</h2>
+                <span id="bannerMetaStats" class="meta-sub">ANSI Shadow</span>
+              </div>
+              <div class="btn-row">
+                <button type="button" class="btn btn-primary" id="copyBannerBtn">Copy</button>
+                <button type="button" class="btn btn-ghost" id="downloadBannerTxtBtn">.txt</button>
+                <button type="button" class="btn btn-ghost" id="sendBannerToCanvasBtn">Edit on Canvas</button>
+              </div>
+            </div>
+            <div class="ascii-stage">
+              <pre id="bannerOutput" class="ascii-output" aria-label="Generated text banner"></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== STUDIO 3: DRAW CANVAS ===== -->
+      <div id="studio-draw" class="studio-pane" role="tabpanel" aria-labelledby="subtab-draw" hidden>
+        <div class="draw-layout">
+          <div class="control-card draw-toolbar">
+            <div class="draw-bar-group">
+              <span class="control-label">Brush</span>
+              <div class="brush-palette" id="brushPalette" role="group" aria-label="Brush characters">
+                <!-- Populated by app.js -->
+              </div>
+              <label class="custom-brush-wrap" title="Type any custom character">
+                <span>Custom</span>
+                <input type="text" id="customBrushInput" maxlength="2" placeholder="✿" aria-label="Custom brush character" />
+              </label>
+            </div>
+
+            <div class="draw-bar-group draw-actions-row">
+              <label class="switch-row symmetry-pill">
+                <input type="checkbox" id="mirrorXToggle" checked />
+                <span>⇄ Mirror-X Symmetry</span>
+              </label>
+
+              <div class="pill-group" id="canvasSizeGroup" aria-label="Canvas grid size">
+                <button type="button" class="pill-btn" data-size="32x16">32×16</button>
+                <button type="button" class="pill-btn is-active" data-size="40x18">40×18</button>
+                <button type="button" class="pill-btn" data-size="52x22">52×22</button>
+              </div>
+
+              <div class="btn-row">
+                <button type="button" class="btn btn-ghost" id="undoDrawBtn" title="Undo stroke">↶ Undo</button>
+                <button type="button" class="btn btn-ghost" id="stampHeartBtn" title="Load a quick starter template">Starter ♡</button>
+                <button type="button" class="btn btn-ghost" id="clearDrawBtn">Clear</button>
+                <button type="button" class="btn btn-primary" id="copyDrawBtn">Copy</button>
+                <button type="button" class="btn btn-ghost" id="downloadDrawTxtBtn">.txt</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="output-card draw-stage-card">
+            <div class="output-header">
+              <div>
+                <h2 class="card-heading">Interactive ASCII Sketchpad</h2>
+                <span id="drawMetaStats" class="meta-sub">Click or drag to paint · Mirror-X auto-flips / \ ( )</span>
+              </div>
+              <span class="brush-indicator">Active: <code id="activeBrushDisplay">#</code></span>
+            </div>
+            <div class="canvas-scroll-wrap">
+              <div id="drawGrid" class="draw-grid is-mirrored" role="application" aria-label="ASCII drawing grid"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>ASCII // STUDIO · Built with pure HTML, CSS &amp; JS</span>
+      <span>Tip: Toggle <code>Discord ```</code> at the top to wrap copied art in code blocks</span>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="./art-data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
